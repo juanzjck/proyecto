@@ -1,0 +1,58 @@
+
+
+<div class="row">
+        <div id="map" style="width: 100%;">
+
+            </div>
+
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script>
+
+        var map = L.map('map').setView([-0.168451, -78.470801], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map); 
+    </script>
+    {{#each polys}}
+ 
+        <script>
+
+              var p="{{this.points}}";
+              console.log(p)
+           /*   var latlngs = [
+                    [-0.166097,-78.468605],
+                    [-0.171326,-78.470766],
+                    [-0.170894,-78.475830],
+                    [-0.169309,-78.476118]
+                ];*/
+            p=p.split(',');    
+            console.log(p)
+
+                var latlngs=[];
+                for(i=0;i<p.length;i++){
+                           
+                        if(p[i+1]!=null && (i%2)==0){
+                          latlngs.push([ Number(p[i]), Number(p[i+1])]) 
+                        }
+                     
+                            
+
+                }
+console.log(latlngs);
+             
+
+                 var polygon = L.polygon(latlngs, {color: 'red' }).addTo(map);
+                  // zoom the map to the polygon
+                 map.fitBounds(polygon.getBounds());
+             /*
+                 L.marker([-0.168451, -78.470801]).addTo(map)
+                 .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+                .openPopup();*/
+               
+            
+        </script>
+             <script> </script>   
+           
+    {{/each}}
+</div>

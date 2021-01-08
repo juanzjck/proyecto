@@ -1,0 +1,126 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+            <div id="map">
+
+            </div>
+
+        </div>
+        <div class="col">
+        
+            <h2>{{erros}}</h2>
+            
+           
+            <h2>New poly</h2>
+            <form method="POST">
+                Name:
+                <br>
+                <input type="text" name="name" id="name">
+                <br> Description:
+                <br>
+                <input type="text" name="decription" id="description"> <br>
+                 Cantidad de puntos:
+                <br>
+                <input type="number" onchange="puntosInput()" id="amount">
+                <h4>Puntos</h4>
+                <div id="points_container">
+                   <!-- <input type="decimal" name="points" onchange="drawMap(this)" class="points" placeholder="Latitud, Longitud">
+                    <input type="decimal" name="points" onchange="drawMap(this)" class="points">-->
+                </div>
+                <br>
+                <select name="user" onchange="changeValue(this.value)" >
+                     <optgroup label="Select Table"></optgroup>
+                    <option value="noe" >Selecione</option>
+                    {{#each users}}
+                    <option value={{_id}} >{{name}}-{{email}}</option>
+                    {{/each}}
+                            </optgroup>
+                </select>
+                <button class="btn btn-success" type="submit">Send</button>
+
+            </form>
+
+        </div>
+    </div>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+<script>
+var map = L.map('map').setView([-0.168451, -78.470801], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map); 
+</script>
+
+<script language = "javascript" type = "text/JavaScript" >
+var latlngs = [
+        [-0.166097,-78.468605],
+        [-0.171326,-78.470766],
+        [-0.170894,-78.475830],
+        [-0.169309,-78.476118]
+    ];
+var latlng = [];
+ function changeValue(value) {
+     console.log(value);
+  }
+function drawMap(e) {
+  
+   
+    var values = e.value;
+    var values = values.split(',')
+    console.log(values)
+    latlng[e.id]=values;
+    //latlng.push(values)
+
+    var latlngs = latlng
+    console.log(latlngs)
+
+
+    for (i = 0; i < latlngs.length; i++) {
+
+
+        latlngs[i][0] = Number(latlngs[i][0])
+        latlngs[i][1] = Number(latlngs[i][1])
+
+
+    }
+    if(poligonCompoleted()){
+        var polygon = L.polygon(latlngs, {color: 'red' }).addTo(map);
+        // zoom the map to the polygon
+        map.fitBounds(polygon.getBounds());
+        /*
+        L.marker([-0.168451, -78.470801]).addTo(map)
+            .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+            .openPopup();*/
+        
+    }
+    
+}
+
+
+function poligonCompoleted(){
+    var flag=false;
+    for(i=0;i<document.getElementById('amount').value;i++){
+        if(latlng[i]!=0){
+            flag=true;
+
+        }else{
+            flag=false;
+        }
+
+    }
+    return flag;
+}
+function puntosInput() {
+    var inputcontainer=   document.getElementById('points_container');
+    var html="";
+    latlng=[];
+    for(i=0;i<document.getElementById('amount').value;i++){
+        html=html+"<input type='decimal' id='"+i +"'  name='points_input' onchange='drawMap(this)' class='points' placeholder='Latitud, Longitud'>"
+        latlng.push(0)
+    }
+
+    inputcontainer.innerHTML=html;
+}
+</script>
+    </div>
